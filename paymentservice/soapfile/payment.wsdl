@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://www.example.com/payment"
+             name="PaymentService"
+             targetNamespace="http://www.example.com/payment"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Request message definition -->
+  <message name="createPaymentRequest">
+    <part name="commandeId" type="xsd:int"/>
+    <part name="amount" type="xsd:float"/>
+    <part name="paymentMethod" type="xsd:string"/>
+  </message>
+
+  <!-- Response message definition -->
+  <message name="createPaymentResponse">
+    <part name="message" type="xsd:string"/>
+    <part name="payment" type="tns:Payment"/>
+  </message>
+
+  <!-- PortType defining the service operations -->
+  <portType name="PaymentServicePortType">
+    <operation name="createPayment">
+      <input message="tns:createPaymentRequest"/>
+      <output message="tns:createPaymentResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Binding information -->
+  <binding name="PaymentServiceBinding" type="tns:PaymentServicePortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createPayment">
+      <soap:operation soapAction="createPayment"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service definition and endpoint URL -->
+  <service name="PaymentService">
+    <port name="PaymentServicePort" binding="tns:PaymentServiceBinding">
+      <soap:address location="http://localhost:3001/payment"/>
+    </port>
+  </service>
+
+</definitions>
